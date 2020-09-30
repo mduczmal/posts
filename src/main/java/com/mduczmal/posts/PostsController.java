@@ -66,4 +66,19 @@ public class PostsController {
         });
         return post.isPresent() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping(value = "posts/{id}")
+    public ResponseEntity<String> modifyPost(@PathVariable Integer id, @RequestParam Optional<String> title,
+                                             @RequestParam Optional<String> body) {
+        if (title.isEmpty() && body.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Optional<Post> post = postRepository.findById(id);
+        post.ifPresent(p ->
+                {
+                    title.ifPresent(p::setTitle);
+                    body.ifPresent(p::setBody);
+                    postRepository.save(p);
+                }
+        );
+        return post.isPresent() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

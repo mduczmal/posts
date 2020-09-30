@@ -112,6 +112,49 @@ class PostsRequestTest {
                 .andExpect(jsonPath("$._embedded.posts[0].body", is("testBody2")))
                 .andExpect(jsonPath("$._embedded.posts[0]._links", aMapWithSize(2)));
     }
+    @Test
+    public void modifyTitle() throws Exception {
+        Post testPost1 = new Post();
+        testPost1.setId(1);
+        testPost1.setUserId(11);
+        testPost1.setTitle("testTitle1");
+        testPost1.setBody("testBody1");
+        Post testPost2 = new Post();
+        testPost2.setId(2);
+        testPost2.setUserId(12);
+        testPost2.setTitle("testTitle2");
+        testPost2.setBody("testBody2");
+
+        when(postRepository.findById(2)).thenReturn(Optional.of(testPost2));
+        when(postRepository.findAll()).thenReturn(List.of(testPost1, testPost2));
+        this.mockMvc.perform(put("/posts/2?title=modifiedTitle2")).andExpect(status().isNoContent());
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(jsonPath("$._embedded.posts", hasSize(2)))
+                .andExpect(jsonPath("$._embedded.posts[1].title", is("modifiedTitle2")));
+
+    }
+    @Test
+    public void modifyBody() throws Exception {
+        Post testPost1 = new Post();
+        testPost1.setId(1);
+        testPost1.setUserId(11);
+        testPost1.setTitle("testTitle1");
+        testPost1.setBody("testBody1");
+        Post testPost2 = new Post();
+        testPost2.setId(2);
+        testPost2.setUserId(12);
+        testPost2.setTitle("testTitle2");
+        testPost2.setBody("testBody2");
+
+        when(postRepository.findById(1)).thenReturn(Optional.of(testPost1));
+        when(postRepository.findAll()).thenReturn(List.of(testPost1, testPost2));
+        this.mockMvc.perform(put("/posts/1?body=modifiedBody1")).andExpect(status().isNoContent());
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(jsonPath("$._embedded.posts", hasSize(2)))
+                .andExpect(jsonPath("$._embedded.posts[0].body", is("modifiedBody1")));
+
+
+    }
 }
 
 
