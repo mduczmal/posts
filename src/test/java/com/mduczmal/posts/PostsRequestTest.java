@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -17,8 +18,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -40,7 +40,7 @@ class PostsRequestTest {
     }
 
     @Test
-    public void getPostsMediaTypeJSON() throws Exception {
+    public void getPostsMediaTypeHAL_JSON() throws Exception {
         this.mockMvc.perform(get("/posts")).andExpect(content().contentType(HAL_JSON));
     }
 
@@ -64,16 +64,16 @@ class PostsRequestTest {
                 .andExpect(jsonPath("$._embedded.posts[0].id", is(1)))
                 .andExpect(jsonPath("$._embedded.posts[0].title", is("testTitle1")))
                 .andExpect(jsonPath("$._embedded.posts[0].body", is("testBody1")))
-                .andExpect(jsonPath("$._embedded.posts[0]._links", aMapWithSize(1)))
+                .andExpect(jsonPath("$._embedded.posts[0]._links", aMapWithSize(2)))
                 .andExpect(jsonPath("$._embedded.posts[1]", aMapWithSize(4)))
                 .andExpect(jsonPath("$._embedded.posts[1].id", is(2)))
                 .andExpect(jsonPath("$._embedded.posts[1].title", is("testTitle2")))
                 .andExpect(jsonPath("$._embedded.posts[1].body", is("testBody2")))
-                .andExpect(jsonPath("$._embedded.posts[1]._links", aMapWithSize(1)));
+                .andExpect(jsonPath("$._embedded.posts[1]._links", aMapWithSize(2)));
     }
 
     @Test
-    public void fetchPostsStatusCreated() throws Exception {
+    public void fetchPosts() throws Exception {
         int testId = 1;
         int testUserId = 1;
         Post testPost = new Post();
@@ -82,9 +82,35 @@ class PostsRequestTest {
         testPost.setTitle("testTitle");
         testPost.setBody("testBody");
         when(fetchService.fetch()).thenReturn(List.of(testPost));
+
         this.mockMvc.perform(post("/posts")).andExpect(status().isCreated());
         verify(fetchService).fetch();
         verify(postRepository).saveAll(anyList());
+    }
+
+    @Test
+    public void deletePost() throws Exception {
+        Post testPost1 = new Post();
+        testPost1.setId(1);
+        testPost1.setUserId(11);
+        testPost1.setTitle("testTitle1");
+        testPost1.setBody("testBody1");
+        Post testPost2 = new Post();
+        testPost2.setId(2);
+        testPost2.setUserId(12);
+        testPost2.setTitle("testTitle2");
+        testPost2.setBody("testBody2");
+
+        when(postRepository.findById(1)).thenReturn(Optional.of(testPost1));
+        when(postRepository.findAll()).thenReturn(List.of(testPost1, testPost2));
+        this.mockMvc.perform(delete("/posts/1")).andExpect(status().isNoContent());
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(jsonPath("$._embedded.posts", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.posts[0]", aMapWithSize(4)))
+                .andExpect(jsonPath("$._embedded.posts[0].id", is(2)))
+                .andExpect(jsonPath("$._embedded.posts[0].title", is("testTitle2")))
+                .andExpect(jsonPath("$._embedded.posts[0].body", is("testBody2")))
+                .andExpect(jsonPath("$._embedded.posts[0]._links", aMapWithSize(2)));
     }
 }
 
