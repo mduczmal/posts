@@ -43,7 +43,7 @@ Testy można uruchomić używając polecenia:
 ### Pobieranie postów
 Listę wszystkich pobranych przez aplikację post postów można pobrać wykonując request GET pod adresem http://localhost:8080/posts .
 
-Pojedynczy post można pobrać wykonując request GET pod adresem http://localhost:8080/posts/<id>, gdzie zamiast \<id\> należy podać id posta.
+Pojedynczy post można pobrać wykonując request GET pod adresem http://localhost:8080/posts/\<id\>, gdzie zamiast \<id\> należy podać id posta.
 
 Listę wszystkich postów o tytułach zawierających jako podciąg znaków <wyszukiwana_fraza> można pobrać wykonując request GET pod adresem
 http://localhost:8080/posts?search=<wyszukiwana_fraza>
@@ -52,7 +52,7 @@ http://localhost:8080/posts?search=<wyszukiwana_fraza>
 Aby nakazać aplikacji aktualizację postów, należy wykonać request POST pod adresem http://localhost:8080/posts .
 
 ### Usuwanie postów
-Post można usunąć wykonując request DELETE pod adresem http://localhost:8080/posts/<id>, gdzie zamiast \<id\> należy podać id posta.
+Post można usunąć wykonując request DELETE pod adresem http://localhost:8080/posts/\<id\>, gdzie zamiast \<id\> należy podać id posta.
 
 ### Modyfikacja postów
 Tytuł posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id>?title=<nowy_tytuł>, 
