@@ -64,6 +64,10 @@ public class Post {
         this.deleted = deleted;
     }
 
+    public Info getInfo() {
+        return new Info(userId, title, body);
+    }
+
     @Override
     public String toString() {
         return "Post{" +

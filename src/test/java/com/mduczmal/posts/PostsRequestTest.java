@@ -40,12 +40,8 @@ class PostsRequestTest {
     @Test
     public void fetchPostsStatusCreated() throws Exception {
         int testId = 1;
-        int testUserId = 1;
         Post testPost = new Post();
         testPost.setId(testId);
-        testPost.setUserId(testUserId);
-        testPost.setTitle("testTitle");
-        testPost.setBody("testBody");
         when(fetchService.fetch()).thenReturn(List.of(testPost));
         this.mockMvc.perform(post("/posts")).andExpect(status().isCreated());
     }
