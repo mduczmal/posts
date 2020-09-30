@@ -55,14 +55,14 @@ Aby nakazać aplikacji aktualizację postów, należy wykonać request POST pod 
 Post można usunąć wykonując request DELETE pod adresem http://localhost:8080/posts/<id\>, gdzie zamiast \<id\> należy podać id posta.
 
 ### Modyfikacja postów
-Tytuł posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id>?title=<nowy_tytuł>, 
+Tytuł posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id\>?title=<nowy_tytuł>, 
 gdzie zamiast \<id\> należy podać id posta, a zamiast <nowy_tytuł> zmodyfikowany tytuł posta.
 
-Pole body posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id>?body=<nowe_pole_body>, 
+Pole body posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id\>?body=<nowe_pole_body>, 
 gdzie zamiast \<id\> należy podać id posta, a zamiast <nowe_pole_body> zmodyfikowane pole body posta.
 
 Można w jednym requeście PUT zmodyfikować równocześnie tytuł i pole body:
-http://localhost:8080/posts/<id>?title=<nowy_tytuł>&body=<nowe_pole_body>
+http://localhost:8080/posts/<id\>?title=<nowy_tytuł>&body=<nowe_pole_body>
 
 ## Autor
 
