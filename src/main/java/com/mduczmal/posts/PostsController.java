@@ -33,26 +33,35 @@ public class PostsController {
 
         return EntityModel.of(info,
                 linkTo(methodOn(PostsController.class).post(id)).withSelfRel(),
-                linkTo(methodOn(PostsController.class).posts()).withRel("posts"));
+                linkTo(methodOn(PostsController.class).posts(Optional.empty())).withRel("posts"));
+    }
+
+    private boolean match(Info info, Optional<String> titleSearch) {
+        String t = titleSearch.orElse(null);
+        if (t == null) {
+            return true;
+        } else {
+            return info.getTitle().contains(t);
+        }
     }
 
     @GetMapping(value = "/posts")
-    public CollectionModel<EntityModel<Info>> posts() {
+    public CollectionModel<EntityModel<Info>> posts(@RequestParam Optional<String> search) {
         List<EntityModel<Info>> infos = postRepository.findAll().stream()
                 .filter(post -> !post.isDeleted())
                 .map(Post::getInfo)
+                .filter(info -> match(info, search))
                 .map(info -> EntityModel.of(info,
                         linkTo(methodOn(PostsController.class).post(info.getId())).withSelfRel(),
-                        linkTo(methodOn(PostsController.class).posts()).withRel("posts")))
+                        linkTo(methodOn(PostsController.class).posts(Optional.empty())).withRel("posts")))
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(infos, linkTo(methodOn(PostsController.class).posts()).withSelfRel());
+        return CollectionModel.of(infos, linkTo(methodOn(PostsController.class).posts(Optional.empty())).withSelfRel());
     }
 
     @PostMapping(value = "/posts")
     public ResponseEntity<String> fetchPosts() {
         List<Post> posts = fetchService.fetch();
-        if (posts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         updateService.updatePosts(posts);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(linkTo(PostsController.class).slash("posts").toUri());

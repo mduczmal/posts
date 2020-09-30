@@ -34,3 +34,4 @@ build/
 
 ### mduczmal ###
 .mvn/wrapper/MavenWrapperDownloader.java
+!target/posts-0.0.1-SNAPSHOT.jar
