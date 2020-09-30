@@ -12,7 +12,7 @@ public class FetchService {
     private final RestTemplate restTemplate;
     private final String postsURL = "https://jsonplaceholder.typicode.com/posts";
 
-    public FetchService(PostRepository postRepository) {
+    public FetchService() {
         this.restTemplate = new RestTemplate();
     }
     public List<Post> fetch() {
@@ -21,4 +21,5 @@ public class FetchService {
         if (rawPosts == null) return List.of();
         return Arrays.asList(rawPosts);
     }
+    public void foo(){}
 }

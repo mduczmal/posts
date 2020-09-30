@@ -3,7 +3,6 @@ package com.mduczmal.posts;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,7 @@ public class PostsController {
         this.postRepository = postRepository;
     }
 
-    @GetMapping(value = "/posts",produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/posts")
     public CollectionModel<EntityModel<Info>> posts() {
         List<EntityModel<Info>> infos = postRepository.findAll().stream()
                 .filter(post -> !post.deleted)
