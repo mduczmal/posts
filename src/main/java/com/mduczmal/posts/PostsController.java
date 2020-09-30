@@ -17,10 +17,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class PostsController {
     private final FetchService fetchService;
+    private final UpdateService updateService;
     private final PostRepository postRepository;
 
-    public PostsController(FetchService fetchService, PostRepository postRepository) {
+    public PostsController(FetchService fetchService, UpdateService updateService, PostRepository postRepository) {
         this.fetchService = fetchService;
+        this.updateService = updateService;
         this.postRepository = postRepository;
     }
 
@@ -37,7 +39,7 @@ public class PostsController {
     @GetMapping(value = "/posts")
     public CollectionModel<EntityModel<Info>> posts() {
         List<EntityModel<Info>> infos = postRepository.findAll().stream()
-                .filter(post -> !post.deleted)
+                .filter(post -> !post.isDeleted())
                 .map(Post::getInfo)
                 .map(info -> EntityModel.of(info,
                         linkTo(methodOn(PostsController.class).post(info.getId())).withSelfRel(),
@@ -51,7 +53,7 @@ public class PostsController {
     public ResponseEntity<String> fetchPosts() {
         List<Post> posts = fetchService.fetch();
         if (posts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        postRepository.saveAll(posts);
+        updateService.updatePosts(posts);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(linkTo(PostsController.class).slash("posts").toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
@@ -76,6 +78,7 @@ public class PostsController {
                 {
                     title.ifPresent(p::setTitle);
                     body.ifPresent(p::setBody);
+                    p.setModified(true);
                     postRepository.save(p);
                 }
         );

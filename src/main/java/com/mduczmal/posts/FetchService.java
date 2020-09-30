@@ -10,16 +10,15 @@ import java.util.List;
 @Service
 public class FetchService {
     private final RestTemplate restTemplate;
-    private final String postsURL = "https://jsonplaceholder.typicode.com/posts";
+    private final String POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 
     public FetchService() {
         this.restTemplate = new RestTemplate();
     }
     public List<Post> fetch() {
-        ResponseEntity<Post[]> response = restTemplate.getForEntity(postsURL, Post[].class);
+        ResponseEntity<Post[]> response = restTemplate.getForEntity(POSTS_URL, Post[].class);
         Post[] rawPosts = response.getBody();
         if (rawPosts == null) return List.of();
         return Arrays.asList(rawPosts);
     }
-    public void foo(){}
 }

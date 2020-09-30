@@ -7,12 +7,12 @@ import java.util.Objects;
 @Entity
 public class Post {
     @Id
-    Integer id;
-    Integer userId;
-    String title;
-    String body;
-    boolean modified;
-    boolean deleted;
+    private Integer id;
+    private Integer userId;
+    private String title;
+    private String body;
+    private boolean modified;
+    private boolean deleted;
 
     public Post() {}
 

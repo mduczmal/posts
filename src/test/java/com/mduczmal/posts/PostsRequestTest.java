@@ -14,9 +14,10 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,6 +31,9 @@ class PostsRequestTest {
 
     @MockBean
     private FetchService fetchService;
+
+    @MockBean
+    private UpdateService updateService;
 
     @MockBean
     private PostRepository postRepository;
@@ -85,7 +89,7 @@ class PostsRequestTest {
 
         this.mockMvc.perform(post("/posts")).andExpect(status().isCreated());
         verify(fetchService).fetch();
-        verify(postRepository).saveAll(anyList());
+        verify(updateService).updatePosts(anyList());
     }
 
     @Test
@@ -131,6 +135,9 @@ class PostsRequestTest {
         this.mockMvc.perform(get("/posts"))
                 .andExpect(jsonPath("$._embedded.posts", hasSize(2)))
                 .andExpect(jsonPath("$._embedded.posts[1].title", is("modifiedTitle2")));
+        assertTrue(testPost2.isModified());
+        assertFalse(testPost1.isModified());
+        verify(postRepository).save(any(Post.class));
 
     }
     @Test
@@ -152,7 +159,9 @@ class PostsRequestTest {
         this.mockMvc.perform(get("/posts"))
                 .andExpect(jsonPath("$._embedded.posts", hasSize(2)))
                 .andExpect(jsonPath("$._embedded.posts[0].body", is("modifiedBody1")));
-
+        assertTrue(testPost1.isModified());
+        assertFalse(testPost2.isModified());
+        verify(postRepository).save(any(Post.class));
 
     }
 }
