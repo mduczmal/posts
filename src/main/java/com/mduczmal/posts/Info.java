@@ -5,22 +5,22 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "posts")
 public class Info {
 
-    private Integer userId;
+    private Integer id;
     private String title;
     private String body;
 
-    public Info(Integer userId, String title, String body) {
-        this.userId = userId;
+    public Info(Integer id, String title, String body) {
+        this.id = id;
         this.title = title;
         this.body = body;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {

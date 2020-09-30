@@ -65,7 +65,7 @@ public class Post {
     }
 
     public Info getInfo() {
-        return new Info(userId, title, body);
+        return new Info(id, title, body);
     }
 
     @Override
