@@ -40,19 +40,42 @@ Testy można uruchomić używając polecenia:
 
 ## API
 
+Odpowiedzi na requesty GET są w zgodne ze standardem HAL.
+
 ### Pobieranie postów
 Listę wszystkich pobranych przez aplikację post postów można pobrać wykonując request GET pod adresem http://localhost:8080/posts .
+```
+curl http://localhost:8080/posts
+```
 
-Pojedynczy post można pobrać wykonując request GET pod adresem http://localhost:8080/posts/<id\>, gdzie zamiast \<id\> należy podać id posta.
+Pojedynczy post można pobrać wykonując request GET pod adresem http://localhost:8080/posts/<id\> .
+
+Na przykład, aby pobrać post o polu id 1 należy wykonać polecenie:
+```
+curl http://localhost:8080/posts/1
+```
 
 Listę wszystkich postów o tytułach zawierających jako podciąg znaków <wyszukiwana_fraza> można pobrać wykonując request GET pod adresem
 http://localhost:8080/posts?search=<wyszukiwana_fraza>
 
+Na przykład, aby pobrać listę postów, które w tytule zawierają słowo "rekrutacja" należy wykonać polecenie:
+```
+curl http://localhost:8080/posts?search=rekrutacja
+```
+
 ### Aktualizacja listy postów na żądanie
 Aby nakazać aplikacji aktualizację postów, należy wykonać request POST pod adresem http://localhost:8080/posts .
+```
+curl -X POST http://localhost:8080/posts
+```
 
 ### Usuwanie postów
 Post można usunąć wykonując request DELETE pod adresem http://localhost:8080/posts/<id\>, gdzie zamiast \<id\> należy podać id posta.
+
+Na przykład, aby usunąć post o polu id 1 należy wykonać polecenie:
+```
+curl -X DELETE http://localhost:8080/posts/1
+```
 
 ### Modyfikacja postów
 Tytuł posta można zmodyfikować wykonując request PUT pod adresem http://localhost:8080/posts/<id\>?title=<nowy_tytuł>, 
@@ -63,6 +86,11 @@ gdzie zamiast \<id\> należy podać id posta, a zamiast <nowe_pole_body> zmodyfi
 
 Można w jednym requeście PUT zmodyfikować równocześnie tytuł i pole body:
 http://localhost:8080/posts/<id\>?title=<nowy_tytuł>&body=<nowe_pole_body>
+
+Na przykład, aby zmodyfikować tytuł posta na "nowy", a pole body na "nowe" należy wykonać polecenie:
+```
+curl -X PUT http://localhost:8080/posts?title=nowy&body=nowe
+```
 
 ## Autor
 
