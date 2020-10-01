@@ -87,9 +87,9 @@ gdzie zamiast \<id\> należy podać id posta, a zamiast <nowe_pole_body> zmodyfi
 Można w jednym requeście PUT zmodyfikować równocześnie tytuł i pole body:
 http://localhost:8080/posts/<id\>?title=<nowy_tytuł>&body=<nowe_pole_body>
 
-Na przykład, aby zmodyfikować tytuł posta na "nowy", a pole body na "nowe" należy wykonać polecenie:
+Na przykład, aby zmodyfikować tytuł posta o id 1 na "nowy", a pole body na "nowe" należy wykonać polecenie:
 ```
-curl -X PUT http://localhost:8080/posts?title=nowy&body=nowe
+curl -X PUT "http://localhost:8080/posts/1?title=nowy&body=nowe"
 ```
 
 ## Autor
