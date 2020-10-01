@@ -28,8 +28,8 @@ public class PostsController {
 
     @GetMapping(value = "/posts/{id}")
     EntityModel<Info> post(@PathVariable Integer id) {
-        Info info = postRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new).getInfo();
+        Info info = postRepository.findById(id).filter(p -> !p.isDeleted())
+                .orElseThrow(() -> new PostNotFoundException(id)).getInfo();
 
         return EntityModel.of(info,
                 linkTo(methodOn(PostsController.class).post(id)).withSelfRel(),
